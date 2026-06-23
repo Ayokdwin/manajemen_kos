@@ -29,4 +29,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function pengaduan()
+    {
+        return $this->hasMany(Pengaduan::class);
+    }
+    public function kontrak(){
+        return $this->hasMany(Kontrak::class);
+    }
 }
