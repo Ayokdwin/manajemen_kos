@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pembayaran extends Model
 {
-    public function kontrak(){
-        return $this->belongsTo(Kontrak::class);
+    public function tagihan(){
+        return $this->belongsTo(Tagihan::class);
     }
 }
