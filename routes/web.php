@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',[WelcomeController::class,'index'])->name('index');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard');
+    Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
+    Route::get('/home', [UserController::class, 'index'])->name('home');
 });
 
 Route::middleware('auth')->group(function () {
