@@ -11,4 +11,8 @@ class Tagihan extends Model
     public function kontrak(){
         return $this->belongsTo(Kontrak::class);
     }
+
+    public function pembayaran(){
+        return $this->hasOne(Pembayaran::class);
+    }
 }
