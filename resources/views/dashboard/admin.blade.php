@@ -15,6 +15,9 @@
                 document.documentElement.classList.add('dark');
             }
         </script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body class="bg-slate-100 text-slate-900">
         <div class="">
@@ -23,10 +26,7 @@
 
                 <div class="flex-1 flex flex-col overflow-hidden">
                     @include('partials.header')
-
-                    <main class="flex-1 overflow-y-auto p-6">
-                        <h1>HALAMAN ADMIN</h1>
-                    </main>
+                    @yield('content')
                 </div>
             </div>
         </div>

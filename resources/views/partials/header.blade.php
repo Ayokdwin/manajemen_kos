@@ -1,4 +1,10 @@
-@props(['title' => 'Home'])
+@php
+    if (!isset($title) || !$title) {
+        $routeName = request()->route()?->getName() ?? '';
+        $segment   = explode('.', $routeName)[0] ?? 'Home';
+        $title     = ucfirst($segment);
+    }
+@endphp
 
 <header
     x-data="{
