@@ -14,6 +14,14 @@ class Tagihan extends Model
         'tanggal_jatuh_tempo',
         'status',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'tanggal_jatuh_tempo' => 'date',
+        ];
+    }
+
     public function kontrak(){
         return $this->belongsTo(Kontrak::class);
     }

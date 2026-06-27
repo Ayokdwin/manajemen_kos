@@ -1,4 +1,4 @@
-@extends('dashboard.admin')
+@extends('layouts.admin')
 
 @section('content')
     <div class="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">

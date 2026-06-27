@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('pengaduans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('kamar_id')->constrained('kamars')->onDelete('cascade')->onUpdate('cascade');   
+            $table->foreignId('kamar_id')->constrained('kamars')->onDelete('cascade')->onUpdate('cascade');
             $table->text('judul');
             $table->text('diskripsi');
-            $table->enum('status', ['pending', 'in_progress', 'resolved'])->default('pending');
+            $table->enum('status', ['pending', 'diproses', 'selesai'])->default('pending');
             $table->timestamps();
         });
     }

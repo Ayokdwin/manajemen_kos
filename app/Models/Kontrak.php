@@ -15,6 +15,14 @@ class Kontrak extends Model
         'status',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'tanggal_masuk' => 'date',
+            'tanggal_selesai' => 'date',
+        ];
+    }
+
     public function user(){
         return $this->belongsTo(User::class);
     }
@@ -24,4 +32,5 @@ class Kontrak extends Model
     public function tagihan(){
         return $this->hasMany(Tagihan::class);
     }
+
 }

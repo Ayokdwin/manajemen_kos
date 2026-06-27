@@ -21,8 +21,16 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::resource('kamar', KamarController::class);
-    
+    Route::get('/kamar', [KamarController::class, 'index'])
+        ->name('kamar.index');
+    Route::middleware('admin')->group(function () {
+        Route::resource('kamar', KamarController::class)
+            ->except('index');
+    });
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('user', UserController::class);
 });
 
 require __DIR__.'/auth.php';

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tagihan_id')->constrained('tagihans')->onDelete('cascade')->onUpdate('cascade');
             $table->date('tgl_bayar');
-            $table->enum('metode',['transfer','cash']);
+            $table->enum('metode',['transfer','tunai']);
             $table->string('bukti_bayar');
-            $table->enum('status',['lunas','belom_dibayar']);
+            $table->enum('status_varifikasi',['pending','disetujui','ditolak']);
             $table->timestamps();
         });
     }

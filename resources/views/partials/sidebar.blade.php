@@ -88,13 +88,15 @@
                     <span x-show="!collapsed" x-transition.opacity.duration.150ms>Kamar</span>
                 </a>
 
-                <a href="" :class="collapsed && 'justify-center'"
+                @if (auth()->check() && auth()->user()->role === 'admin')
+                <a href="{{ route('user.index') }}" :class="collapsed && 'justify-center'"
                    class="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
-                          {{ $isActive('penyewa.*') ? $activeClasses : $inactiveClasses }}">
+                          {{ $isActive('user.*') ? $activeClasses : $inactiveClasses }}">
                     <i class="fa-solid fa-user-group w-[18px] text-center shrink-0"></i>
                     <span x-show="!collapsed" x-transition.opacity.duration.150ms>Penyewa</span>
                 </a>
-
+                @endif
+                
                 <a href="" :class="collapsed && 'justify-center'"
                    class="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
                           {{ $isActive('kontrak.*') ? $activeClasses : $inactiveClasses }}">
