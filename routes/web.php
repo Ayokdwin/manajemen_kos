@@ -6,6 +6,7 @@ use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KamarController;
+use App\Http\Controllers\PengaduanController;
 
 Route::get('/',[WelcomeController::class,'index'])->name('index');
 
@@ -23,6 +24,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/kamar', [KamarController::class, 'index'])
         ->name('kamar.index');
+    Route::get('/pengaduan/create',[PengaduanController::class,'create'])->name('pengaduan.create');
+    Route::get('/pengaduan',[PengaduanController::class,'index'])->name('pengaduan.index');
+    Route::post('/pengaduan',[PengaduanController::class,'store'])->name('pengaduan.store');
     Route::middleware('admin')->group(function () {
         Route::resource('kamar', KamarController::class)
             ->except('index');

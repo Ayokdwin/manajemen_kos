@@ -103,8 +103,8 @@
                     <i class="fa-solid fa-file-signature w-[18px] text-center shrink-0"></i>
                     <span x-show="!collapsed" x-transition.opacity.duration.150ms>Kontrak</span>
                 </a>
-
-                <a href="" :class="collapsed && 'justify-center'"
+                
+                <a href="{{route('pengaduan.index')}}" :class="collapsed && 'justify-center'"
                    class="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
                           {{ $isActive('pengaduan.*') ? $activeClasses : $inactiveClasses }}">
                     <i class="fa-solid fa-triangle-exclamation w-[18px] text-center shrink-0"></i>
