@@ -17,7 +17,9 @@
                     <div class="mb-6">
                         <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">Buat Laporan</h1>
                         <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                            Lengkapi data kamar baru yang akan ditambahkan ke sistem.
+                            Gunakan form ini untuk membuat laporan masalah terkait kamar Anda. 
+                            <br>
+                            untuk memberikan informasi yang jelas dan lengkap agar masalah dapat ditangani dengan cepat.
                         </p>
                     </div>
 
@@ -30,7 +32,7 @@
                                 <i class="fa-solid fa-circle-exclamation text-rose-500 mt-0.5"></i>
                                 <div>
                                     <p class="text-sm font-medium text-rose-700 dark:text-rose-400">
-                                        Periksa kembali data yang Anda masukkan
+                                        Lapor dengan jelas dan lengkap agar masalah dapat ditangani dengan cepat.
                                     </p>
                                     <ul
                                         class="mt-1.5 text-sm text-rose-600 dark:text-rose-400 list-disc list-inside space-y-0.5">
@@ -76,17 +78,16 @@
                                 </label>
                                 <div class="relative">
                                     <span
-                                        class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-slate-400"></span>
-                                    <input type="text" id="judul" name="judul"
-                                        value="{{ old('judul') }}" placeholder="Contoh: Keran mati "
-                                        class="w-full pl-10 pr-3.5 py-2.5 rounded-lg text-sm
-                                           bg-slate-50 dark:bg-slate-800
-                                           border border-slate-200 dark:border-slate-700
-                                           text-slate-700 dark:text-slate-200 placeholder:text-slate-400
-                                           focus:border-indigo-400 dark:focus:border-indigo-500
-                                           focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20
-                                           outline-none transition-colors
-                                           @error('judul') border-rose-300 dark:border-rose-500/50 @enderror">
+                                        class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5"></span>
+                                    <input type="text" id="judul" name="judul"placeholder="Contoh: Keran mati "
+                                        class="w-full px-3.5 py-2.5 rounded-lg text-sm
+                                       bg-slate-50 dark:bg-slate-800
+                                       border border-slate-200 dark:border-slate-700
+                                       text-slate-700 dark:text-slate-200 placeholder:text-slate-400
+                                       focus:border-indigo-400 dark:focus:border-indigo-500
+                                       focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20
+                                       outline-none transition-colors
+                                       @error('judul') border-rose-300 dark:border-rose-500/50 @enderror">
                                     @error('judul')
                                         <p class="mt-1.5 text-xs text-rose-600 dark:text-rose-400">{{ $message }}</p>
                                     @enderror

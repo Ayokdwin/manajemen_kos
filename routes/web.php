@@ -28,6 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaduan/create',[PengaduanController::class,'create'])->name('pengaduan.create');
     Route::get('/pengaduan',[PengaduanController::class,'index'])->name('pengaduan.index');
     Route::post('/pengaduan',[PengaduanController::class,'store'])->name('pengaduan.store');
+    Route::delete('/pengaduan/{id}',[PengaduanController::class,'delete'])->name('pengaduan.delete');
+    Route::get('/pengaduan/{id}',[PengaduanController::class,'show'])->name('pengaduan.show');
+    Route::post('/pengaduan/{id}',[PengaduanController::class,'update'])->name('pengaduan.update');
     Route::middleware('admin')->group(function () {
         Route::resource('kamar', KamarController::class)
             ->except('index');

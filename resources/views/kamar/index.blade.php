@@ -288,6 +288,172 @@
                 @endif
             </div>
         </main>
+
+        {{-- ====================== MODAL DETAIL KAMAR ====================== --}}
+        <div
+            x-show="modalOpen"
+            x-cloak
+            class="fixed inset-0 z-50 flex items-center justify-center p-4"
+        >
+            {{-- Overlay --}}
+            <div
+                x-show="modalOpen"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                @click="closeModal()"
+                class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"
+            ></div>
+
+            {{-- Panel --}}
+            <div
+                x-show="modalOpen"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-xl
+                       border border-slate-200 dark:border-slate-800 overflow-hidden"
+                @click.stop
+            >
+                <template x-if="selectedKamar">
+                    <div>
+                        {{-- Foto --}}
+                        <div class="relative h-48 bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-500/10 dark:to-violet-500/10
+                                    flex items-center justify-center">
+                            <template x-if="selectedKamar.foto">
+                                <img :src="selectedKamar.foto" class="w-full h-full object-cover">
+                            </template>
+                            <template x-if="!selectedKamar.foto">
+                                <i class="fa-solid fa-bed text-5xl text-indigo-300 dark:text-indigo-500/40"></i>
+                            </template>
+
+                            <button
+                                @click="closeModal()"
+                                class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/80
+                                       flex items-center justify-center text-slate-500 hover:text-slate-800
+                                       dark:text-slate-300 dark:hover:text-white transition-colors backdrop-blur-sm"
+                            >
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+
+                            <span x-show="selectedKamar.status === 'tersedia'"
+                                  class="absolute top-3 left-3 text-xs font-semibold px-2 py-1 rounded-md
+                                         bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400">
+                                Tersedia
+                            </span>
+                            <span x-show="selectedKamar.status === 'dihuni'"
+                                  class="absolute top-3 left-3 text-xs font-semibold px-2 py-1 rounded-md
+                                         bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-400">
+                                Dihuni
+                            </span>
+                        </div>
+
+                        {{-- Konten --}}
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-1">
+                                <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                                    Kamar <span x-text="selectedKamar.no_kamar"></span>
+                                </h2>
+                                <span class="text-xs font-medium px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800
+                                             text-slate-500 dark:text-slate-400 capitalize" x-text="selectedKamar.tipe"></span>
+                            </div>
+
+                            <p class="text-2xl font-semibold text-indigo-700 dark:text-indigo-400 mb-4">
+                                Rp <span x-text="selectedKamar.harga"></span>
+                                <span class="text-sm font-normal text-slate-400">/bulan</span>
+                            </p>
+
+                            {{-- Info masa sewa, hanya tampil di kamar yang dihuni --}}
+                            <template x-if="selectedKamar.status === 'dihuni'">
+                                <div class="flex items-center gap-4 mb-4 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60">
+                                    <div>
+                                        <p class="text-xs text-slate-400 dark:text-slate-500">Tanggal Masuk</p>
+                                        <p class="text-sm font-medium text-slate-700 dark:text-slate-200" x-text="selectedKamar.tgl_masuk"></p>
+                                    </div>
+                                    <div class="w-px h-8 bg-slate-200 dark:bg-slate-700"></div>
+                                    <div>
+                                        <p class="text-xs text-slate-400 dark:text-slate-500">Sewa Berakhir</p>
+                                        <p class="text-sm font-medium text-slate-700 dark:text-slate-200" x-text="selectedKamar.tgl_selesai"></p>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <div class="mb-4">
+                                <p class="text-xs font-semibold tracking-wide text-slate-400 dark:text-slate-500 uppercase mb-1.5">
+                                    Fasilitas
+                                </p>
+                                <p class="text-sm text-slate-600 dark:text-slate-300" x-text="selectedKamar.fasilitas"></p>
+                            </div>
+
+                            <div class="mb-6">
+                                <p class="text-xs font-semibold tracking-wide text-slate-400 dark:text-slate-500 uppercase mb-1.5">
+                                    Deskripsi
+                                </p>
+                                <p class="text-sm text-slate-600 dark:text-slate-300" x-text="selectedKamar.deskripsi"></p>
+                            </div>
+
+                            {{-- Aksi --}}
+                            <div class="flex gap-2">
+                                {{-- Tombol Tutup --}}
+                                <button
+                                    @click="closeModal()"
+                                    class="flex-1 py-2.5 rounded-lg text-sm font-medium
+                                        bg-slate-100 dark:bg-slate-800
+                                        text-slate-600 dark:text-slate-300
+                                        hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+
+                                    Tutup
+                                </button>
+
+                                @if(auth()->user()->role === 'admin')
+                                    {{-- Tombol Edit --}}
+                                    <a
+                                        :href="`/kamar/${selectedKamar.id}/edit`"
+                                        class="flex-1 py-2.5 rounded-lg text-center text-sm font-medium
+                                            bg-amber-500 text-white hover:bg-amber-600 transition">
+                                        <i class="fa-solid fa-pen-to-square mr-2"></i>
+                                        Edit
+                                    </a>
+
+                                    {{-- Tombol Hapus --}}
+                                    <form
+                                        :action="`/kamar/${selectedKamar.id}`"
+                                        method="POST"
+                                        onsubmit="return confirm('Yakin ingin menghapus kamar ini?')">
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition">
+                                            <i class="fa-solid fa-trash mr-2"></i>
+                                            Hapus
+                                        </button>
+
+                                    </form>
+                                @else
+                                    <template x-if="selectedKamar.status === 'tersedia'">
+                                        <button
+                                            class="flex-1 py-2.5 rounded-lg text-sm font-medium
+                                                bg-indigo-600 text-white
+                                                hover:bg-indigo-700 transition">
+                                            Ajukan Sewa
+                                        </button>
+                                    </template>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
