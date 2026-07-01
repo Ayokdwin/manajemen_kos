@@ -60,10 +60,10 @@ class KamarController extends Controller
         return redirect()->route('kamar.index')->with('success', 'Kamar berhasil ditambahkan.');
     }
 
-    // public function show($id)
-    // {
-    //     return view('kamar.show', compact('id'));
-    // }
+    public function show(Kamar $kamar)
+    {
+        return view('kamar.show', compact('kamar'));
+    }
 
     public function edit(Kamar $kamar)
     {

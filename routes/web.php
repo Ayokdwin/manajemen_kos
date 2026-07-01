@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KamarController;
 use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\KontrakController;
 
 Route::get('/',[WelcomeController::class,'index'])->name('index');
 
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('user', UserController::class);
+    Route::resource('kontrak', KontrakController::class);
 });
 
 require __DIR__.'/auth.php';
