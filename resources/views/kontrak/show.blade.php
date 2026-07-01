@@ -108,7 +108,7 @@
                                 </a>
                                 {{--approval--}}
                        
-                                
+                                 @if (auth()->user()->role === 'admin'&& $kontrak->approval_status == 'pending')
                                <form method="POST" action="{{ route('kontrak.approve', $kontrak->id) }}">
                                     @csrf
                                     @method('PUT')
@@ -121,6 +121,20 @@
                                         Approve Kontrak
                                     </button>
                                 </form>
+                                #reject
+                               <form method="POST" action="{{ route('kontrak.reject', $kontrak->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit"
+                                        class="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm font-medium
+                                            text-white bg-red-600 dark:bg-red-500
+                                            hover:bg-red-700 dark:hover:bg-red-600
+                                            transition-colors duration-200">
+                                        <i class="fa-solid fa-times text-xs"></i>
+                                        Reject Kontrak
+                                    </button>
+                                </form>
+                                @endif
 
                                 @if ($kontrak->status === 'aktif')
                                     <form method="POST" action="{{ route('kontrak.update', $kontrak->id) }}">
@@ -231,14 +245,7 @@
                                         border-b border-slate-100 dark:border-slate-800">
                                 <h3 class="font-semibold text-slate-900 dark:text-slate-100">Tagihan Bulanan</h3>
 
-                                @if ($kontrak->status === 'aktif')
-                                    <a href=""
-                                       class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-medium text-white
-                                              bg-indigo-600 hover:bg-indigo-700 transition-colors">
-                                        <i class="fa-solid fa-plus"></i>
-                                        Generate Tagihan
-                                    </a>
-                                @endif
+                               
                             </div>
 
                             @if ($kontrak->tagihan->isEmpty())
@@ -282,6 +289,9 @@
                                                         {{ \Carbon\Carbon::createFromDate($tagihan->tahun, $tagihan->bulan, 1)->translatedFormat('F Y') }}
                                                     </p>
                                                     <p class="text-xs text-slate-400 dark:text-slate-500">
+                                                        Periode tagihan
+                                                    </p>
+                                                    <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">
                                                         Jatuh tempo {{ $tagihan->tanggal_jatuh_tempo->format('d M Y') }}
                                                     </p>
                                                 </div>

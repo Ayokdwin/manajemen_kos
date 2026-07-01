@@ -11,7 +11,7 @@ class Pembayaran extends Model
         'tgl_bayar',
         'metode',
         'bukti_bayar',
-        'status',
+        'status_varifikasi',
     ];
 
     public function tagihan(){

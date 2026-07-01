@@ -97,19 +97,52 @@
                 </a>
                 @endif
 
-                <a href="{{ route('kontrak.index') }}" :class="collapsed && 'justify-center'"
-                   class="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
-                          {{ $isActive('kontrak.*') ? $activeClasses : $inactiveClasses }}">
-                    <i class="fa-solid fa-file-signature w-[18px] text-center shrink-0"></i>
-                    <span x-show="!collapsed" x-transition.opacity.duration.150ms>Kontrak</span>
-                </a>
-                
-                <a href="{{route('pengaduan.index')}}" :class="collapsed && 'justify-center'"
-                   class="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
-                          {{ $isActive('pengaduan.*') ? $activeClasses : $inactiveClasses }}">
-                    <i class="fa-solid fa-triangle-exclamation w-[18px] text-center shrink-0"></i>
-                    <span x-show="!collapsed" x-transition.opacity.duration.150ms>Pengaduan</span>
-                </a>
+                {{-- Kontrak --}}
+                 @php
+    $kontrakwaiting = \App\Models\Kontrak::whereIn('approval_status', ['pending', 'rejected'])->count();
+@endphp
+                 <a href="{{ route('kontrak.index') }}" :class="collapsed && 'justify-center'"
+        class="relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
+                {{ $isActive('kontrak.*') ? $activeClasses : $inactiveClasses }}">
+
+            <span class="relative shrink-0">
+                <i class="fa-solid fa-file-signature w-[18px] text-center shrink-0"></i>
+
+                @if($kontrakwaiting > 0)
+                    <span class="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-[3px] flex items-center justify-center
+                                 rounded-full bg-rose-500 text-white text-[10px] leading-none font-semibold">
+                        {{ $kontrakwaiting > 99 ? '99+' : $kontrakwaiting }}
+                    </span>
+                @endif
+            </span>
+            <span x-show="!collapsed" x-transition.opacity.duration.150ms>
+                Kontrak
+            </span>
+        </a>
+
+                {{-- Pengaduan --}}
+                @php
+    $pengaduanwaiting = \App\Models\Pengaduan::whereIn('status', ['pending', 'diproses'])->count();
+@endphp
+                 <a href="{{ route('pengaduan.index') }}" :class="collapsed && 'justify-center'"
+        class="relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
+                {{ $isActive('pengaduan.*') ? $activeClasses : $inactiveClasses }}">
+
+            <span class="relative shrink-0">
+                <i class="fa-solid fa-triangle-exclamation w-[18px] text-center"></i>
+
+                @if(auth()->user()->role === 'admin' && $pengaduanwaiting > 0 )
+                    <span class="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-[3px] flex items-center justify-center
+                                 rounded-full bg-rose-500 text-white text-[10px] leading-none font-semibold">
+                        {{ $pengaduanwaiting > 99 ? '99+' : $pengaduanwaiting }}
+                    </span>
+                @endif
+            </span>
+            <span x-show="!collapsed" x-transition.opacity.duration.150ms>
+                Pengaduan
+            </span>
+        </a>
+
             </div>
         </div>
 
@@ -121,19 +154,54 @@
             </p>
 
             <div class="space-y-1">
-                <a href="" :class="collapsed && 'justify-center'"
-                   class="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
-                          {{ $isActive('tagihan.*') ? $activeClasses : $inactiveClasses }}">
-                    <i class="fa-solid fa-file-invoice-dollar w-[18px] text-center shrink-0"></i>
-                    <span x-show="!collapsed" x-transition.opacity.duration.150ms>Tagihan</span>
-                </a>
+                
+                {{-- Pembayaran --}}
+                @php
+    $statustagihan = \App\Models\Tagihan::whereIn('status', ['belum_bayar','menunggu'])->count();
+@endphp
+        <a href="{{route('tagihan.index')}}" :class="collapsed && 'justify-center'"
+        class="relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
+                {{ $isActive('tagihan.*') ? $activeClasses : $inactiveClasses }}">
+            <span class="relative shrink-0">
+                <i class="fa-solid fa-file-invoice-dollar w-[18px] text-center shrink-0"></i>
+                    @if(auth()->user()->role === 'user' && $statustagihan > 0)
+                        <span class="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-[3px] flex items-center justify-center
+                                     rounded-full bg-rose-500 text-white text-[10px] leading-none font-semibold">
+                            {{ $statustagihan > 99 ? '99+' : $statustagihan }}
+                        </span>
+                    @endif
+            </span>
+            <span x-show="!collapsed" x-transition.opacity.duration.150ms>
+                Tagihan
+            </span>
+        </a>
 
-                <a href="" :class="collapsed && 'justify-center'"
-                   class="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
-                          {{ $isActive('pembayaran.*') ? $activeClasses : $inactiveClasses }}">
-                    <i class="fa-solid fa-money-check-dollar w-[18px] text-center shrink-0"></i>
-                    <span x-show="!collapsed" x-transition.opacity.duration.150ms>Pembayaran</span>
-                </a>
+                @php
+    $pending = \App\Models\Pembayaran::where('status_varifikasi', 'pending')->count();
+    
+@endphp
+
+        <a href="{{ route('pembayaran.index') }}" :class="collapsed && 'justify-center'"
+        class="relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
+                {{ $isActive('pembayaran.*') ? $activeClasses : $inactiveClasses }}">
+
+            <span class="relative shrink-0">
+                <i class="fa-solid fa-money-check-dollar w-[18px] text-center"></i>
+               
+                    @if(auth()->user()->role === 'admin' && $pending > 0)
+                        <span class="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-[3px] flex items-center justify-center
+                                     rounded-full bg-rose-500 text-white text-[10px] leading-none font-semibold">
+                            {{ $pending > 99 ? '99+' : $pending }}
+                        </span>
+                    @endif
+               
+              
+            </span>
+
+            <span x-show="!collapsed" x-transition.opacity.duration.150ms>
+                Pembayaran
+            </span>
+        </a>
             </div>
         </div>
     </nav>

@@ -165,6 +165,9 @@
                                                         Tagihan {{ \Carbon\Carbon::createFromDate($item->tahun, $item->bulan, 1)->translatedFormat('F Y') }}
                                                     </p>
                                                     <p class="text-xs text-slate-400 dark:text-slate-500">
+                                                        Periode tagihan
+                                                    </p>
+                                                    <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">
                                                         Jatuh tempo {{ $item->tanggal_jatuh_tempo->format('d M Y') }}
                                                     </p>
                                                 </div>

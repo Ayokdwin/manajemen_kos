@@ -8,6 +8,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KamarController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\KontrakController;
+use App\Http\Controllers\TagihanController;
+use App\Http\Controllers\PembayaranController;
 
 Route::get('/',[WelcomeController::class,'index'])->name('index');
 
@@ -33,6 +35,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaduan/{id}',[PengaduanController::class,'show'])->name('pengaduan.show');
     Route::post('/pengaduan/{id}',[PengaduanController::class,'update'])->name('pengaduan.update');
 
+    #tagihan
+    Route::get('/tagihan',[TagihanController::class,'index'])->name('tagihan.index');
+    #pembayaran
+    Route::get('/pembayaran',[PembayaranController::class,'index'])->name('pembayaran.index');
+    Route::get('/pembayaran/{id}',[PembayaranController::class,'show'])->name('pembayaran.show');
+    Route::get('/pembayaran/payment/{id}',[PembayaranController::class,'payment'])->name('pembayaran.payment');
+    Route::post('/pembayaran/payment/{id}',[PembayaranController::class,'store'])->name('pembayaran.store');
+
+    
+
       Route::resource('kamar', KamarController::class)
             ->except('index');
     #kontrak
@@ -45,8 +57,12 @@ Route::middleware('auth')->group(function () {
     // Route::post('/kontrak',[KontrakController::class,'store'])->name('kontrak.store');
 Route::resource('kontrak', KontrakController::class);
 
+
     Route::middleware('admin')->group(function () {
       Route::put('/kontrak/{kontrak}/approve', [KontrakController::class, 'approve'])->name('kontrak.approve');
+      Route::put('/kontrak/{kontrak}/reject', [KontrakController::class, 'reject'])->name('kontrak.reject');
+
+      Route::post('/pembayaran/payment/{id}',[PembayaranController::class,'verify'])->name('pembayaran.verify');
     });
 });
 

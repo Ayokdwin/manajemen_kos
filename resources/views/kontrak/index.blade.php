@@ -201,7 +201,7 @@
                                                 @else
                                                     <span
                                                         class="inline-flex items-center text-xs font-medium px-2 py-1 rounded-md
-                                                                 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                                                                 bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-400">
                                                         Rejected
                                                     </span>
                                                 @endif

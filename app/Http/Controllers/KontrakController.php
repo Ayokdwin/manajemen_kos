@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Kontrak;
 use App\Models\Kamar;
 use App\Models\User;
+use App\Models\Tagihan;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;
 
 class KontrakController extends Controller
@@ -125,11 +127,50 @@ class KontrakController extends Controller
     }
     public function approve(Kontrak $kontrak)
     {
-        $kontrak->update(['approval_status' => 'approved']);
+        DB::transaction(function () use ($kontrak) {
+            $kontrak->update(['approval_status' => 'approved']);
+
+            $this->generateTagihanBulanan($kontrak->fresh(['kamar']));
+        });
 
         return redirect()
             ->route('kontrak.index')
             ->with('success', 'Kontrak berhasil disetujui.');
+    }
+    public function reject(Kontrak $kontrak)
+    {
+        $kontrak->update(['approval_status' => 'rejected']);
+        return redirect()
+            ->route('kontrak.index')
+            ->with('success', 'Kontrak berhasil ditolak.');
+    }
+
+    private function generateTagihanBulanan(Kontrak $kontrak): void
+    {
+        if (! $kontrak->kamar) {
+            return;
+        }
+
+        $start = $kontrak->tanggal_masuk->copy()->startOfMonth();
+        $end = $kontrak->tanggal_selesai->copy()->startOfMonth();
+        $periode = CarbonPeriod::create($start, '1 month', $end);
+
+        foreach ($periode as $tanggal) {
+            $jatuhTempo = $tanggal->copy()->addMonthNoOverflow()->day(10)->toDateString();
+
+            Tagihan::firstOrCreate(
+                [
+                    'kontrak_id' => $kontrak->id,
+                    'bulan' => $tanggal->month,
+                    'tahun' => $tanggal->year,
+                ],
+                [
+                    'jumlah_tagihan' => $kontrak->kamar->harga_per_bulan,
+                    'tanggal_jatuh_tempo' => $jatuhTempo,
+                    'status' => 'belum_bayar',
+                ]
+            );
+        }
     }
 
 }

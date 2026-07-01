@@ -135,7 +135,7 @@
                             bg-white dark:bg-slate-900 overflow-hidden">
                     <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
                         <h3 class="font-semibold text-slate-900 dark:text-slate-100">Tagihan Perlu Perhatian</h3>
-                        <a href=""
+                        <a href="{{route('tagihan.index')}}"
                            class="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
                             Lihat semua
                         </a>
