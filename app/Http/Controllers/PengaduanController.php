@@ -86,10 +86,22 @@ class PengaduanController extends Controller
     public function update($id)
     {
         $pengaduan = Pengaduan::findOrFail($id);
-        $pengaduan->status = 'selesai';
+
+        if ($pengaduan->status === 'pending' || blank($pengaduan->status)) {
+            $pengaduan->status = 'diproses';
+        } elseif ($pengaduan->status === 'diproses') {
+            $pengaduan->status = 'selesai';
+        } else {
+            return redirect()->route('pengaduan.show', $pengaduan->id)
+                ->with('success', 'Pengaduan sudah berstatus selesai.');
+        }
+
         $pengaduan->save();
 
-        return redirect()->route('pengaduan.index')->with('success', 'Pengaduan berhasil ditandai sebagai selesai.');
+        return redirect()->route('pengaduan.show', $pengaduan->id)
+            ->with('success', $pengaduan->status === 'diproses'
+                ? 'Pengaduan berhasil ditandai sedang diproses.'
+                : 'Pengaduan berhasil ditandai sebagai selesai.');
     }
 
 }

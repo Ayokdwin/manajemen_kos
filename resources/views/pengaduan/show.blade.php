@@ -24,7 +24,7 @@
                         @php
                             $badge = match($pengaduan->status) {
                                 'selesai'    => 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400',
-                             
+                                'diproses'       => 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-400',
                                 'pending' => 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400',
                                
                             };
@@ -83,16 +83,17 @@
                                       hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                                 Kembali
                             </a>
-                                 @if(auth()->user()->role === 'admin')
+                            @if(auth()->user()->role === 'admin' && $pengaduan->status !== 'selesai')
                                 <form method="POST" action="{{ route('pengaduan.update', $pengaduan->id) }}">
                                     @csrf
                                     <button type="submit"
                                             class="px-5 py-2.5 rounded-lg text-sm font-medium text-white
-                                                   bg-amber-500 hover:bg-amber-600 transition-colors">
-                                        <i class="fa-solid fa-pen-to-square mr-1.5"></i>Tandai Selesai
+                                                   {{ $pengaduan->status === 'pending' ? 'bg-amber-500 hover:bg-amber-600' : 'bg-emerald-500 hover:bg-emerald-600' }} transition-colors">
+                                        <i class="fa-solid {{ $pengaduan->status === 'pending' ? 'fa-pen-to-square' : 'fa-check' }} mr-1.5"></i>
+                                        {{ $pengaduan->status === 'pending' ? 'Tandai Sedang Diproses' : 'Tandai Selesai' }}
                                     </button>
                                 </form>
-                                @endif
+                            @endif
 
                                 <form method="POST" action="{{ route('pengaduan.delete', $pengaduan->id) }}"
                                       onsubmit="return confirm('Yakin ingin menghapus pengaduan milik {{ $pengaduan->user->name }}? Tindakan ini tidak dapat dibatalkan.')">
