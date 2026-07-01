@@ -58,7 +58,11 @@
                                     <div>
                                         <p class="text-xs text-slate-400 dark:text-slate-500">Tanggal Masuk</p>
                                         <p class="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                            {{ $kontrak->tanggal_masuk->format('d M Y') }}
+                                            @if ($kontrak->tanggal_masuk)
+                                                {{ $kontrak->tanggal_masuk->format('d M Y') }}
+                                            @else
+                                                -
+                                            @endif
                                         </p>
                                     </div>
                                 </div>
@@ -71,7 +75,11 @@
                                     <div>
                                         <p class="text-xs text-slate-400 dark:text-slate-500">Tanggal Selesai</p>
                                         <p class="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                            {{ $kontrak->tanggal_selesai->format('d M Y') }}
+                                            @if ($kontrak->tanggal_selesai)
+                                                {{ $kontrak->tanggal_selesai->format('d M Y') }}
+                                            @else
+                                                -
+                                            @endif
                                         </p>
                                     </div>
                                 </div>
@@ -98,6 +106,21 @@
                                           hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                                     <i class="fa-solid fa-pen text-xs"></i>Edit Kontrak
                                 </a>
+                                {{--approval--}}
+                       
+                                
+                               <form method="POST" action="{{ route('kontrak.approve', $kontrak->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit"
+                                        class="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm font-medium
+                                            text-white bg-green-600 dark:bg-green-500
+                                            hover:bg-green-700 dark:hover:bg-green-600
+                                            transition-colors duration-200">
+                                        <i class="fa-solid fa-check text-xs"></i>
+                                        Approve Kontrak
+                                    </button>
+                                </form>
 
                                 @if ($kontrak->status === 'aktif')
                                     <form method="POST" action="{{ route('kontrak.update', $kontrak->id) }}">
@@ -289,7 +312,7 @@
                                                     @endif
                                                 </div>
 
-                                                <a href="{{ route('tagihan.show', $tagihan->id) }}"
+                                                <a href=""
                                                    class="w-8 h-8 inline-flex items-center justify-center rounded-lg
                                                           text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400
                                                           hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-colors">

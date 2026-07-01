@@ -115,6 +115,8 @@
                                             Deposit</th>
                                         <th class="text-left font-medium text-slate-500 dark:text-slate-400 px-5 py-3">
                                             Status</th>
+                                        <th class="text-left font-medium text-slate-500 dark:text-slate-400 px-5 py-3">
+                                            Status approval</th>
                                         <th class="text-right font-medium text-slate-500 dark:text-slate-400 px-5 py-3">Aksi
                                         </th>
                                     </tr>
@@ -182,25 +184,49 @@
                                                     </span>
                                                 @endif
                                             </td>
+                                            {{-- Status approval --}}
+                                             <td class="px-5 py-3.5">
+                                                @if ($item->approval_status === 'pending')
+                                                    <span
+                                                        class="inline-flex items-center text-xs font-medium px-2 py-1 rounded-md
+                                                                 bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400">
+                                                        Pending
+                                                    </span>
+                                                @elseif ($item->approval_status === 'approved')
+                                                    <span
+                                                        class="inline-flex items-center text-xs font-medium px-2 py-1 rounded-md
+                                                                 bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400">
+                                                        Approved
+                                                    </span>
+                                                @else
+                                                    <span
+                                                        class="inline-flex items-center text-xs font-medium px-2 py-1 rounded-md
+                                                                 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                                                        Rejected
+                                                    </span>
+                                                @endif
+                                            </td>
 
                                             {{-- Aksi --}}
                                             <td class="px-5 py-3.5 text-right">
                                                 <div class="inline-flex items-center gap-1.5">
-                                                    <a href="{{ route('kontrak.show', $item->id) }}"
+                                                    <a href="{{ route('kontrak.show', $item) }}"
                                                         class="w-8 h-8 inline-flex items-center justify-center rounded-lg
                                                               text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400
                                                               hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-colors">
                                                         <i class="fa-solid fa-eye text-sm"></i>
                                                     </a>
 
-                                                    <a href="{{ route('kontrak.edit', $item->id) }}"
+                                                   
+
+                                                    <a href="{{ route('kontrak.edit', $item) }}"
                                                         class="w-8 h-8 inline-flex items-center justify-center rounded-lg
                                                               text-slate-400 hover:text-amber-600 dark:hover:text-amber-400
                                                               hover:bg-amber-50 dark:hover:bg-amber-500/10 transition-colors">
                                                         <i class="fa-solid fa-pen text-sm"></i>
                                                     </a>
 
-                                                    <form method="POST" action="{{ route('kontrak.destroy', $item->id) }}"
+                                                    <form method="POST" action="{{ route('kontrak.destroy', $item) }}"
                                                         onsubmit="return confirm('Hapus kontrak ini? Tindakan ini tidak dapat dibatalkan.')">
                                                         @csrf
                                                         @method('DELETE')

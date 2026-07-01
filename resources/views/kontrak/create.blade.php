@@ -80,6 +80,7 @@
                                     <label for="user_id" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                                         Penyewa
                                     </label>
+                                   
                                     <select id="user_id" name="user_id"
                                             class="w-full px-3.5 py-2.5 rounded-lg text-sm
                                                    bg-slate-50 dark:bg-slate-800

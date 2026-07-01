@@ -139,11 +139,11 @@
                                 </form>
                             @else
                                 @if ($kamar->status === 'tersedia')
-                                    <button type="button"
+                                    <a href="{{route('kontrak.create', ['kamar_id' => $kamar->id])}}" type="button"
                                             class="px-5 py-2.5 rounded-lg text-sm font-medium text-white
                                                    bg-indigo-600 hover:bg-indigo-700 transition-colors">
                                         Ajukan Sewa
-                                    </button>
+                                    </a>
                                 @endif
 
                                 @if ($kontrakAktif ?? false)

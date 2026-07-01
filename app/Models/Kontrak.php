@@ -12,6 +12,7 @@ class Kontrak extends Model
         'tanggal_masuk',
         'tanggal_selesai',
         'deposit',
+        'approval_status',
         'status',
     ];
 

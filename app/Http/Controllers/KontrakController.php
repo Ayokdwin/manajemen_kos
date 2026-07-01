@@ -109,4 +109,27 @@ class KontrakController extends Controller
         ->route('kontrak.index')
         ->with('success', 'Kontrak berhasil diperbarui.');
 }
+
+    public function destroy(Kontrak $kontrak)
+    {
+        DB::transaction(function () use ($kontrak) {
+            Kamar::where('id', $kontrak->kamar_id)
+                ->update(['status' => 'tersedia']);
+
+            $kontrak->delete();
+        });
+
+        return redirect()
+            ->route('kontrak.index')
+            ->with('success', 'Kontrak berhasil dihapus.');
+    }
+    public function approve(Kontrak $kontrak)
+    {
+        $kontrak->update(['approval_status' => 'approved']);
+
+        return redirect()
+            ->route('kontrak.index')
+            ->with('success', 'Kontrak berhasil disetujui.');
+    }
+
 }

@@ -288,13 +288,14 @@
                 @endif
             </div>
         </main>
+<<<<<<< Updated upstream
+=======
 
         {{-- ====================== MODAL DETAIL KAMAR ====================== --}}
         <div
             x-show="modalOpen"
             x-cloak
-            class="fixed inset-0 z-50 flex items-center justify-center p-4"
-        >
+            class="fixed inset-0 z-50 flex items-center justify-center p-4">
             {{-- Overlay --}}
             <div
                 x-show="modalOpen"
@@ -454,6 +455,7 @@
                 </template>
             </div>
         </div>
+>>>>>>> Stashed changes
     </div>
 </div>
 @endsection
