@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/kamar', [KamarController::class, 'index'])
         ->name('kamar.index');
+
     #pengaduan
     Route::get('/pengaduan/create',[PengaduanController::class,'create'])->name('pengaduan.create');
     Route::get('/pengaduan',[PengaduanController::class,'index'])->name('pengaduan.index');
@@ -37,38 +38,38 @@ Route::middleware('auth')->group(function () {
 
     #tagihan
     Route::get('/tagihan',[TagihanController::class,'index'])->name('tagihan.index');
+
     #pembayaran
     Route::get('/pembayaran',[PembayaranController::class,'index'])->name('pembayaran.index');
     Route::get('/pembayaran/{id}',[PembayaranController::class,'show'])->name('pembayaran.show');
     Route::get('/pembayaran/payment/{id}',[PembayaranController::class,'payment'])->name('pembayaran.payment');
     Route::post('/pembayaran/payment/{id}',[PembayaranController::class,'store'])->name('pembayaran.store');
 
-    
-
-      Route::resource('kamar', KamarController::class)
+    Route::resource('kamar', KamarController::class)
             ->except('index');
     #kontrak
-    // Route::get('/kontrak',[KontrakController::class,'index'])->name('kontrak.index');
-    // Route::get('/kontrak/create',[KontrakController::class,'create'])->name('kontrak.create');
-    // Route::get('/kontrak/{id}',[KontrakController::class,'show'])->name('kontrak.show');
-    // Route::get('/kontrak/{id}',[KontrakController::class,'edit'])->name('kontrak.edit');
-    // Route::put('/kontrak/{id}',[KontrakController::class,'update'])->name('kontrak.update');
-    // Route::delete('/kontrak/{id}',[KontrakController::class,'destroy'])->name('kontrak.destroy');
-    // Route::post('/kontrak',[KontrakController::class,'store'])->name('kontrak.store');
-Route::resource('kontrak', KontrakController::class);
+    Route::get('/kontrak', [KontrakController::class, 'index'])->name('kontrak.index');
+    Route::get('/kontrak/create', [KontrakController::class, 'create'])->name('kontrak.create');
+    Route::post('/kontrak', [KontrakController::class, 'store'])->name('kontrak.store');
+    Route::get('/kontrak/{kontrak}', [KontrakController::class, 'show'])->name('kontrak.show');
+
 
 
     Route::middleware('admin')->group(function () {
+      Route::resource('kontrak', KontrakController::class)
+          ->except(['index', 'create', 'store', 'show']);
+
       Route::put('/kontrak/{kontrak}/approve', [KontrakController::class, 'approve'])->name('kontrak.approve');
       Route::put('/kontrak/{kontrak}/reject', [KontrakController::class, 'reject'])->name('kontrak.reject');
 
-      Route::post('/pembayaran/payment/{id}',[PembayaranController::class,'verify'])->name('pembayaran.verify');
+    Route::put('/pembayaran/{id}/verify', [PembayaranController::class, 'verify'])
+        ->name('pembayaran.verify');
     });
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('user', UserController::class);
-   
+
 });
 
 require __DIR__.'/auth.php';

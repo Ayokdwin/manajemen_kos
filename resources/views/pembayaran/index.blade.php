@@ -84,7 +84,6 @@
                                                title="Lihat kontrak">
                                                 <i class="fa-solid fa-eye text-sm"></i>
                                             </a>
-
                                         </td>
                                     </tr>
                                 @empty

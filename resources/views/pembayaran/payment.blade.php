@@ -142,7 +142,6 @@
 
                             <form action="{{ route('pembayaran.store', $tagihan->id) }}" method="POST" enctype="multipart/form-data" class="p-6 sm:p-8 space-y-6">
                                 @csrf
-
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="rounded-xl bg-slate-50 dark:bg-slate-800/50 p-4">
                                         <p class="text-xs font-semibold tracking-wide text-slate-400 dark:text-slate-500 uppercase mb-2">
@@ -202,20 +201,20 @@
                                         </div>
 
                                        <div class="mt-5 rounded-2xl bg-white dark:bg-slate-900 p-4 border border-dashed border-indigo-200 dark:border-indigo-500/30">
-    <p class="text-xs font-semibold tracking-wide text-slate-400 uppercase mb-3">
-        QR Simulasi
-    </p>
+                                            <p class="text-xs font-semibold tracking-wide text-slate-400 uppercase mb-3">
+                                                QR Simulasi
+                                            </p>
 
-    <div class="flex justify-center">
-        {!! QrCode::size(200)->generate(
-            'ID:12345|Nominal:50000|Merchant:Toko ABC'
-        ) !!}
-    </div>
+                                            <div class="flex justify-center">
+                                                {!! QrCode::size(200)->generate(
+                                                    'ID:12345|Nominal:50000|Merchant:Toko ABC'
+                                                ) !!}
+                                            </div>
 
-    <p class="mt-3 text-center text-xs text-slate-400">
-        Scan QR untuk simulasi pembayaran
-    </p>
-</div>
+                                            <p class="mt-3 text-center text-xs text-slate-400">
+                                                Scan QR untuk simulasi pembayaran
+                                            </p>
+                                        </div>
                                     </div>
 
                                     <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 p-5">

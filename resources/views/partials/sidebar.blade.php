@@ -1,4 +1,5 @@
 @php
+    $currentUser = auth()->user();
     $isActive = fn (string $pattern) => request()->routeIs($pattern);
     $activeClasses   = 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400 font-medium';
     $inactiveClasses = 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800';
@@ -99,8 +100,10 @@
 
                 {{-- Kontrak --}}
                  @php
-    $kontrakwaiting = \App\Models\Kontrak::whereIn('approval_status', ['pending', 'rejected'])->count();
-@endphp
+                    $kontrakwaiting = \App\Models\Kontrak::whereIn('approval_status', ['pending', 'rejected'])
+                        ->when($currentUser->role !== 'admin', fn ($query) => $query->where('user_id', $currentUser->id))
+                        ->count();
+                @endphp
                  <a href="{{ route('kontrak.index') }}" :class="collapsed && 'justify-center'"
         class="relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
                 {{ $isActive('kontrak.*') ? $activeClasses : $inactiveClasses }}">
@@ -122,8 +125,8 @@
 
                 {{-- Pengaduan --}}
                 @php
-    $pengaduanwaiting = \App\Models\Pengaduan::whereIn('status', ['pending', 'diproses'])->count();
-@endphp
+                    $pengaduanwaiting = \App\Models\Pengaduan::whereIn('status', ['pending', 'diproses'])->count();
+                @endphp
                  <a href="{{ route('pengaduan.index') }}" :class="collapsed && 'justify-center'"
         class="relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
                 {{ $isActive('pengaduan.*') ? $activeClasses : $inactiveClasses }}">
@@ -154,17 +157,26 @@
             </p>
 
             <div class="space-y-1">
-                
+
                 {{-- Pembayaran --}}
                 @php
-    $statustagihan = \App\Models\Tagihan::whereIn('status', ['belum_bayar','menunggu'])->count();
-@endphp
+                    $statustagihan = \App\Models\Tagihan::whereHas('kontrak', function ($query) use ($currentUser) {
+                            $query->where('user_id', $currentUser->id);
+                        })
+                        ->where(function ($query) {
+                            $query->where('status', 'belum_bayar')
+                                ->orWhereHas('pembayaran', function ($pembayaranQuery) {
+                                    $pembayaranQuery->where('status_varifikasi', 'pending');
+                                });
+                        })
+                        ->count();
+                @endphp
         <a href="{{route('tagihan.index')}}" :class="collapsed && 'justify-center'"
         class="relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
                 {{ $isActive('tagihan.*') ? $activeClasses : $inactiveClasses }}">
             <span class="relative shrink-0">
                 <i class="fa-solid fa-file-invoice-dollar w-[18px] text-center shrink-0"></i>
-                    @if(auth()->user()->role === 'user' && $statustagihan > 0)
+                    @if($currentUser->role === 'user' && $statustagihan > 0)
                         <span class="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-[3px] flex items-center justify-center
                                      rounded-full bg-rose-500 text-white text-[10px] leading-none font-semibold">
                             {{ $statustagihan > 99 ? '99+' : $statustagihan }}
@@ -177,9 +189,14 @@
         </a>
 
                 @php
-    $pending = \App\Models\Pembayaran::where('status_varifikasi', 'pending')->count();
-    
-@endphp
+                    $pending = \App\Models\Pembayaran::where('status_varifikasi', 'pending')
+                        ->when($currentUser->role !== 'admin', function ($query) use ($currentUser) {
+                            $query->whereHas('tagihan.kontrak', function ($kontrakQuery) use ($currentUser) {
+                                $kontrakQuery->where('user_id', $currentUser->id);
+                            });
+                        })
+                        ->count();
+                @endphp
 
         <a href="{{ route('pembayaran.index') }}" :class="collapsed && 'justify-center'"
         class="relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm transition-colors
@@ -187,15 +204,15 @@
 
             <span class="relative shrink-0">
                 <i class="fa-solid fa-money-check-dollar w-[18px] text-center"></i>
-               
-                    @if(auth()->user()->role === 'admin' && $pending > 0)
+
+                    @if($pending > 0)
                         <span class="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-[3px] flex items-center justify-center
                                      rounded-full bg-rose-500 text-white text-[10px] leading-none font-semibold">
                             {{ $pending > 99 ? '99+' : $pending }}
                         </span>
                     @endif
-               
-              
+
+
             </span>
 
             <span x-show="!collapsed" x-transition.opacity.duration.150ms>

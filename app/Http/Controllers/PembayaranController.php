@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Tagihan;
 use App\Models\Pembayaran;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PembayaranController extends Controller
 {
@@ -72,10 +73,26 @@ class PembayaranController extends Controller
             'status_varifikasi' => 'pending',
         ];
 
-        if ($request->hasFile('bukti_bayar')) {
-            $payload['bukti_bayar'] = $request->file('bukti_bayar')->store('pembayaran', 'public');
+        $buktiBayar = $request->file('bukti_bayar');
+
+        if ($validated['metode'] === 'transfer') {
+            $sourcePath = $buktiBayar?->getPathname();
+
+            if (! $buktiBayar || ! $buktiBayar->isValid() || ! $sourcePath || ! is_file($sourcePath)) {
+                return back()
+                    ->withErrors(['bukti_bayar' => 'Bukti bayar gagal diupload. Silakan pilih ulang file gambar yang valid.'])
+                    ->withInput();
+            }
+
+            $extension = $buktiBayar->extension() ?: $buktiBayar->getClientOriginalExtension() ?: 'jpg';
+            $payload['bukti_bayar'] = 'pembayaran/' . Str::uuid() . '.' . $extension;
+
+            Storage::disk('public')->put(
+                $payload['bukti_bayar'],
+                file_get_contents($sourcePath)
+            );
         } elseif (! $pembayaran->exists) {
-            $payload['bukti_bayar'] = '';
+            $payload['bukti_bayar'] = 'tunai';
         }
 
         $pembayaran->fill($payload);
@@ -108,7 +125,7 @@ class PembayaranController extends Controller
         if ($validated['status_varifikasi'] === 'disetujui') {
             $pembayaran->tagihan->update(['status' => 'lunas']);
         } elseif ($validated['status_varifikasi'] === 'ditolak') {
-            $pembayaran->tagihan->update(['status' => 'belum lunas']);
+            $pembayaran->tagihan->update(['status' => 'belum_bayar']);
         }
 
         return redirect()

@@ -8,7 +8,7 @@
             {{-- Greeting --}}
             <div>
                 <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    Hallo, {{ auth()->user()->name }}
+                    Halo, {{ auth()->user()->name }}
                 </h1>
                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
                     Berikut ringkasan kondisi kos hari ini.

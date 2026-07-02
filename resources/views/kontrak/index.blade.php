@@ -117,8 +117,10 @@
                                             Status</th>
                                         <th class="text-left font-medium text-slate-500 dark:text-slate-400 px-5 py-3">
                                             Status approval</th>
+                                        @if (auth()->check() && auth()->user()->role === 'admin')
                                         <th class="text-right font-medium text-slate-500 dark:text-slate-400 px-5 py-3">Aksi
                                         </th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -207,6 +209,7 @@
                                                 @endif
                                             </td>
 
+                                            @if (auth()->check() && auth()->user()->role === 'admin')
                                             {{-- Aksi --}}
                                             <td class="px-5 py-3.5 text-right">
                                                 <div class="inline-flex items-center gap-1.5">
@@ -217,7 +220,7 @@
                                                         <i class="fa-solid fa-eye text-sm"></i>
                                                     </a>
 
-                                                   
+
 
                                                     <a href="{{ route('kontrak.edit', $item) }}"
                                                         class="w-8 h-8 inline-flex items-center justify-center rounded-lg
@@ -239,6 +242,7 @@
                                                     </form>
                                                 </div>
                                             </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>

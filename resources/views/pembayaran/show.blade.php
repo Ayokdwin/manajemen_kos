@@ -203,33 +203,35 @@
                                                 </p>
                                             </div>
                                             <div>
-                                                #approve
-                                    @if (auth()->user()->role === 'admin'&& $pembayaran->status_varifikasi == 'pending')
-                                    <form method="POST" action="{{ route('pembayaran.verify', $pembayaran->id) }}">
-                                        @csrf
-                                        <input type="hidden" name="status_varifikasi" value="disetujui">
+                                                @if (auth()->user()->role === 'admin' && $pembayaran->status_varifikasi == 'pending')
+                                                    <div class="space-y-2">
+                                                        <form method="POST" action="{{ route('pembayaran.verify', $pembayaran->id) }}">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden" name="status_varifikasi" value="disetujui">
 
-                                        <button type="submit"
-                                            class="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm font-medium
-                                                text-white bg-green-600 hover:bg-green-700">
-                                            <i class="fa-solid fa-check text-xs"></i>
-                                            Approve Pembayaran
-                                        </button>
-                                    </form>
-                                    #reject
-                                    <form method="POST" action="{{ route('pembayaran.verify', $pembayaran->id) }}">
-                                        @csrf
+                                                            <button type="submit"
+                                                                class="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm font-medium
+                                                                    text-white bg-green-600 hover:bg-green-700">
+                                                                <i class="fa-solid fa-check text-xs"></i>
+                                                                Approve Pembayaran
+                                                            </button>
+                                                        </form>
 
-                                        <input type="hidden" name="status_varifikasi" value="ditolak">
+                                                        <form method="POST" action="{{ route('pembayaran.verify', $pembayaran->id) }}">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden" name="status_varifikasi" value="ditolak">
 
-                                        <button type="submit"
-                                            class="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm font-medium
-                                                text-white bg-red-600 hover:bg-red-700">
-                                            <i class="fa-solid fa-xmark text-xs"></i>
-                                            Reject Pembayaran
-                                        </button>
-                                    </form>
-                                    @endif
+                                                            <button type="submit"
+                                                                class="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm font-medium
+                                                                    text-white bg-red-600 hover:bg-red-700">
+                                                                <i class="fa-solid fa-xmark text-xs"></i>
+                                                                Reject Pembayaran
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -239,7 +241,7 @@
                                             Bukti Pembayaran
                                         </p>
 
-                                        @if ($pembayaran->bukti_bayar)
+                                        @if ($pembayaran->metode === 'transfer' && $pembayaran->bukti_bayar)
                                             <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
                                                 <img src="{{ asset('storage/' . $pembayaran->bukti_bayar) }}"
                                                      alt="Bukti Pembayaran"

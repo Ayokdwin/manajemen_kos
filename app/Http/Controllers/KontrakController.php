@@ -14,12 +14,19 @@ class KontrakController extends Controller
 {
     public function index(Request $request)
     {
+        $user = $request->user();
+
         $kontrak = Kontrak::with(['user', 'kamar'])
+            ->when($user->role !== 'admin', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
             ->when($request->search, function ($q, $search) {
-                $q->whereHas('user', function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%");
-                })->orWhereHas('kamar', function ($q) use ($search) {
-                    $q->where('nomor_kamar', 'like', "%{$search}%");
+                $q->where(function ($q) use ($search) {
+                    $q->whereHas('user', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    })->orWhereHas('kamar', function ($q) use ($search) {
+                        $q->where('nomor_kamar', 'like', "%{$search}%");
+                    });
                 });
             })
             ->when($request->status, function ($q, $status) {
@@ -34,7 +41,10 @@ class KontrakController extends Controller
 
     public function create()
     {
-        $penyewa = User::where('role', 'user')->orderBy('name')->get();
+        $penyewa = auth()->user()->role === 'admin'
+            ? User::where('role', 'user')->orderBy('name')->get()
+            : collect([auth()->user()]);
+
         $kamar = Kamar::where('status', 'tersedia')->orderBy('no_kamar')->get();
 
 
@@ -43,13 +53,20 @@ class KontrakController extends Controller
 
     public function store()
     {
-        $validated = request()->validate([
-            'user_id'     => 'required|exists:users,id',
+        $request = request();
+        $isAdmin = $request->user()->role === 'admin';
+
+        $validated = $request->validate([
+            'user_id'     => $isAdmin ? 'required|exists:users,id' : 'nullable',
             'kamar_id'    => 'required|exists:kamars,id',
             'tanggal_masuk'   => 'required|date',
             'tanggal_selesai' => 'required|date|after:tanggal_masuk',
             'deposit'     => 'required|numeric|min:0',
         ]);
+
+        if (! $isAdmin) {
+            $validated['user_id'] = $request->user()->id;
+        }
 
         DB::transaction(function () use ($validated) {
             Kontrak::create([
@@ -66,6 +83,10 @@ class KontrakController extends Controller
 
     public function show(Kontrak $kontrak)
     {
+        if (auth()->user()->role !== 'admin' && $kontrak->user_id !== auth()->id()) {
+            abort(403, 'Akses ditolak.');
+        }
+
         $kontrak->load(['user', 'kamar', 'tagihan.pembayaran']);
 
         return view('kontrak.show', compact('kontrak'));
