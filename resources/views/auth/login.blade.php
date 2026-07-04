@@ -62,15 +62,15 @@
                     <span class="text-violet-600">Lebih Mudah</span>
                 </h1>
                 <p class="text-slate-300 text-sm leading-relaxed max-w-xs">
-                    Ikuti langkah mudah berikut untuk mendaftarkan akun Anda dan mulai mengelola hunian secara digital.
+                    Kos Manager adalah aplikasi manajemen kos berbasis web yang memudahkan pemilik kos untuk mengelola hunian mereka dengan efisien dan efektif.
                 </p>
             </div>
 
             {{-- Step cards di bawah --}}
             <div class="relative z-10 grid grid-cols-3 gap-3">
                 @foreach ([
-                    ['1', 'Buat akun penyewa', 'fa-user-plus'],
-                    ['2', 'Tunggu konfirmasi admin', 'fa-file-signature'],
+                    ['1', 'Masuk ke akun', 'fa-user-plus'],
+                    ['2', 'Isi formulir pendaftaran', 'fa-file-signature'],
                     ['3', 'Nikmati hunian Anda', 'fa-house-chimney'],
                 ] as [$num, $text, $icon])
                     <div class="rounded-xl bg-white/10 backdrop-blur-sm border border-white/15 p-4">

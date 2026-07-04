@@ -288,8 +288,6 @@
                 @endif
             </div>
         </main>
-<<<<<<< Updated upstream
-=======
 
         {{-- ====================== MODAL DETAIL KAMAR ====================== --}}
         <div
@@ -455,7 +453,6 @@
                 </template>
             </div>
         </div>
->>>>>>> Stashed changes
     </div>
 </div>
 @endsection
